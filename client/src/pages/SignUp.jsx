@@ -1,32 +1,96 @@
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useForm } from "react-hook-form";
 
 function SignUp() {
+  const {
+    setError,
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      const res = await axios({
+        method: "post",
+        url: "/api/v1/auth/signup",
+        data: data,
+      });
+      reset();
+      console.log(res);
+    } catch (error) {
+      setError("root", {
+        message: "This email is already taken",
+      });
+    }
+  };
+  console.log(errors);
+
   return (
     <div className="mx-auto max-w-lg p-3">
       <h1 className="my-7 text-center text-3xl font-semibold">SignUp</h1>
 
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <input
+          {...register("username", {
+            required: "Username is required!",
+          })}
           type="text"
           placeholder="Username"
           id="username"
           className="rounded-lg bg-slate-100 p-3"
         />
+        {errors.username && (
+          <div className="text-base leading-none text-red-700">
+            {errors.username.message}
+          </div>
+        )}
         <input
+          {...register("email", {
+            required: "Email is required!",
+            validate: (value) => value.includes("@") || "Invalid Email",
+          })}
           type="text"
           placeholder="Email"
           id="email"
           className="rounded-lg bg-slate-100 p-3"
         />
+        {errors.email && (
+          <div className="text-base leading-none text-red-700">
+            {errors.email.message}
+          </div>
+        )}
         <input
+          {...register("password", {
+            required: "Password is required!",
+            minLength: {
+              value: 8,
+              message: "Password must have 8 characters",
+            },
+          })}
           type="password"
           placeholder="Password"
           id="password"
           className="rounded-lg bg-slate-100 p-3"
         />
-        <button className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:opacity-95 disabled:opacity-80">
-          Sign Up
+        {errors.password && (
+          <div className="text-base leading-none text-red-700">
+            {errors.password.message}
+          </div>
+        )}
+        <button
+          disabled={isSubmitting}
+          className="rounded-lg bg-slate-700 p-3 uppercase text-white hover:opacity-95 disabled:opacity-80"
+        >
+          {isSubmitting ? "Signing Up..." : "Sign Up"}
         </button>
+        {errors.root && (
+          <div className="text-base leading-none text-red-700">
+            {errors.root.message}
+          </div>
+        )}
       </form>
       <div className="mt-5 flex gap-1">
         <p>Have an account?</p>
