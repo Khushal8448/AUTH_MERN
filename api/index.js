@@ -29,3 +29,14 @@ mongoose
 // Routes
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/auth", authRoutes);
+
+// OnError
+app.use((err, req, res, next) => {
+  const statuscode = err.statuscode || 500;
+  const message = err.message || "Internal Server Error";
+  return res.status(statuscode).json({
+    success: false,
+    message,
+    statuscode,
+  });
+});
