@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
 function SignUp() {
@@ -19,11 +20,25 @@ function SignUp() {
         data: data,
       });
       reset();
-      console.log(res);
+      toast.success(`You have successfully signed up`);
     } catch (error) {
-      setError("root", {
-        message: "This email is already taken",
-      });
+      console.log(error);
+      if (error.request.status === 404) {
+        setError("root", {
+          message: "Can't connect to server",
+        });
+      }
+      if (error.request.status === 500) {
+        setError("root", {
+          message: "Internal server error",
+        });
+      }
+      if (error.request.status === 409) {
+        setError("email", {
+          message: "User already exists!",
+        });
+      }
+      toast.error("Signup failed ");
     }
   };
   console.log(errors);
@@ -43,7 +58,7 @@ function SignUp() {
           className="rounded-lg bg-slate-100 p-3"
         />
         {errors.username && (
-          <div className="text-base leading-none text-red-700">
+          <div className="px-2 text-base leading-none text-red-700">
             {errors.username.message}
           </div>
         )}
@@ -58,7 +73,7 @@ function SignUp() {
           className="rounded-lg bg-slate-100 p-3"
         />
         {errors.email && (
-          <div className="text-base leading-none text-red-700">
+          <div className="px-2 text-base leading-none text-red-700">
             {errors.email.message}
           </div>
         )}
@@ -76,7 +91,7 @@ function SignUp() {
           className="rounded-lg bg-slate-100 p-3"
         />
         {errors.password && (
-          <div className="text-base leading-none text-red-700">
+          <div className="px-2 text-base leading-none text-red-700">
             {errors.password.message}
           </div>
         )}
