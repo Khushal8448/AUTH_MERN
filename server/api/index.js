@@ -11,8 +11,8 @@ const app = express();
 dotenv.config();
 
 app.use(express.json());
-// app.use(morgan("dev"));
-// app.use(cors());
+app.use(morgan("dev"));
+app.use(cors());
 
 const PORT = process.env.PORT || 8000;
 
