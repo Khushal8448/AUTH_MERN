@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
@@ -12,14 +12,17 @@ function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     try {
-      const res = await axios({
+      await axios({
         method: "post",
         url: "/api/v1/auth/signup",
         data: data,
       });
       reset();
+      navigate("/sign-in");
       toast.success(`You have successfully signed up`);
     } catch (error) {
       console.log(error);
@@ -45,7 +48,7 @@ function SignUp() {
 
   return (
     <div className="mx-auto max-w-lg p-3">
-      <h1 className="my-7 text-center text-3xl font-semibold">SignUp</h1>
+      <h1 className="my-7 text-center text-4xl font-semibold">Sign Up</h1>
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         <input
