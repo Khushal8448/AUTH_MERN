@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { signInSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import OAuth from "../components/OAuth";
 
 function SignIn() {
   const {
@@ -111,6 +112,7 @@ function SignIn() {
         >
           {isSubmitting ? "Signing In..." : "Sign In"}
         </button>
+        <OAuth />
         {errors.root && (
           <div className="text-base leading-none text-red-700">
             {errors.root.message}

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import OAuth from "../components/OAuth";
 
 function SignUp() {
   const {
@@ -104,6 +105,8 @@ function SignUp() {
         >
           {isSubmitting ? "Signing Up..." : "Sign Up"}
         </button>
+        <OAuth />
+
         {errors.root && (
           <div className="text-base leading-none text-red-700">
             {errors.root.message}
