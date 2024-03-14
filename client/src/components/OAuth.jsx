@@ -1,11 +1,13 @@
 import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
 import { app } from "../firebase";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../redux/user/userSlice";
 
 function OAuth() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   async function handleGoogleClick() {
     try {
@@ -22,7 +24,8 @@ function OAuth() {
         },
       });
       dispatch(signInSuccess(res.data.data));
-      console.log(result);
+      navigate("/");
+      console.log(res);
     } catch (error) {
       console.error("Could not login with google", error);
     }
