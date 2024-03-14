@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { signInSuccess } from "../redux/user/userSlice";
+import { useDispatch } from "react-redux";
 
 function SignIn() {
   const {
@@ -13,6 +15,7 @@ function SignIn() {
   } = useForm();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
     try {
@@ -23,6 +26,7 @@ function SignIn() {
       });
       reset();
       console.log(res);
+      dispatch(signInSuccess(res.data.data));
       navigate("/");
       toast.success(`You have successfully signed In`);
     } catch (error) {
@@ -44,11 +48,6 @@ function SignIn() {
           message: "Invalid inputs",
         });
       }
-      // if (error.request.status === 409) {
-      //   setError("email", {
-      //     message: "User already exists!",
-      //   });
-      // }
       toast.error("SignIn failed ");
     }
   };
