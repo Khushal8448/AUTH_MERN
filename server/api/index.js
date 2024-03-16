@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
@@ -12,6 +13,7 @@ dotenv.config();
 
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(cookieParser());
 app.use(cors());
 
 const PORT = process.env.PORT || 8000;
